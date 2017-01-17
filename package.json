@@ -1,6 +1,6 @@
 {
   "name": "html-head-webpack-plugin",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "The plugin parsers an object into HTML Head Tags",
   "engines": {
     "node": ">=4"
