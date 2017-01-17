@@ -1,0 +1,47 @@
+{
+  "name": "html-head-webpack-plugin",
+  "version": "0.1.2",
+  "description": "The plugin parsers an object into HTML Head Tags",
+  "engines": {
+    "node": ">=4"
+  },
+  "keywords": [
+    "webpack",
+    "plugin",
+    "html"
+  ],
+  "author": {
+    "name": "Sebastian Döll",
+    "email": "sebastian@katallaxie.me"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katallaxie/html-head-webpack-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/katallaxie/html-head-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/katallaxie/html-head-webpack-plugin",
+  "dependencies": {
+    "loader-utils": "^0.2.16"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.0",
+    "tslint": "^4.3.1",
+    "typescript": "^2.1.5",
+    "webpack": "^2.2.0-rc.8"
+  },
+  "scripts": {
+    "prepublish": "npm run build",
+    "test": "exit 1;",
+    "watch": "npm run watch:ts",
+    "watch:ts": "npm run build:ts -- --watch --diagnostics",
+    "prebuild": "npm run lint",
+    "compile": "tsc --pretty",
+    "build": "rm -rf dist && tsc --pretty",
+    "lint": "tslint src/*.ts",
+    "release": "standard-version"
+  }
+}
