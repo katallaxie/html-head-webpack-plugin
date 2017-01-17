@@ -7,29 +7,7 @@ export class HtmlHeadElementsPlugin {
   public static RE_ENDS_WITH_BS = /\/$/;
   public compiler: any;
 
-  constructor(public options: HtmlHeadElementsPluginOptions = <any>{}) { }
-
-  public apply(compiler: any) {
-
-    this.compiler = compiler;
-
-    compiler.plugin('compilation', (nmf: any) => {
-      nmf.options.htmlElements = nmf.options.htmlElement || {};
-      nmf.plugin('html-webpack-plugin-before-html-generation', (htmlPluginData, cb) => {
-        const options = this.options;
-        if (options) {
-          const publicPath = htmlPluginData.assets.publicPath;
-          Object.keys(options).forEach((type) => {
-            nmf.options.htmlElements[type] = this.getHtmlElementString(options[type], publicPath);
-          });
-        }
-        cb(null, htmlPluginData);
-      });
-    });
-
-  }
-
-  public createTag(tagName, attrMap, publicPath) {
+  public static createTag(tagName, attrMap, publicPath) {
     publicPath = publicPath || '';
 
     // add trailing slash if we have a publicPath and it doesn't have one.
@@ -60,13 +38,35 @@ export class HtmlHeadElementsPlugin {
 
   }
 
+  constructor(public options: HtmlHeadElementsPluginOptions = <any>{}) { }
+
+  public apply(compiler: any) {
+
+    this.compiler = compiler;
+
+    compiler.plugin('compilation', (nmf: any) => {
+      nmf.options.htmlElements = nmf.options.htmlElement || {};
+      nmf.plugin('html-webpack-plugin-before-html-generation', (htmlPluginData, cb) => {
+        const options = this.options;
+        if (options) {
+          const publicPath = htmlPluginData.assets.publicPath;
+          Object.keys(options).forEach((type) => {
+            nmf.options.htmlElements[type] = this.getHtmlElementString(options[type], publicPath);
+          });
+        }
+        cb(null, htmlPluginData);
+      });
+    });
+
+  }
+
   public getHtmlElementString(dataSource, publicPath) {
     return Object.getOwnPropertyNames(dataSource)
       .map(function (name) {
         if (Array.isArray(dataSource[name])) {
-          return dataSource[name].map(function (attrs) { return this.createTag(name, attrs, publicPath); });
+          return dataSource[name].map(function (attrs) { return HtmlHeadElementsPlugin.createTag(name, attrs, publicPath); });
         } else {
-          return [this.createTag(name, dataSource[name], publicPath)];
+          return [HtmlHeadElementsPlugin.createTag(name, dataSource[name], publicPath)];
         }
       })
       .reduce(function (arr, curr) {
